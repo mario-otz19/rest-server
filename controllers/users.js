@@ -65,8 +65,9 @@ const deleteUser = async(req, res) => {
     // Borrar de BD definitivamente
     // const user = await User.findByIdAndDelete(id);
     
-    const user = await User.findByIdAndUpdate(id, { state: false });
-    
+    // Actualizar el estado del usuario (para que no se muestre)
+    const user = await User.findByIdAndUpdate(id, { state: false }, {new: true});
+
     res.json({
         user
     });

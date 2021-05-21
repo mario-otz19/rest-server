@@ -3,8 +3,8 @@ const { check } = require('express-validator');
 const router = Router();
 
 const { emailExists, isValidRole, userExistsById } = require('../helpers/validatorsDB');
-const { validateFields } = require('../middlewares/validateFields');
-const { getUsers, addUser, updateUser, patchUsers, deleteUser } = require('../controllers/users');
+const { fieldsValidator, jwtValidator, isAdminRole, hasRole } = require('../middlewares');
+const { getUsers, addUser, updateUser, deleteUser } = require('../controllers/users');
 
 // Operaciones con usuarios
 router.get('/', getUsers);  
@@ -17,20 +17,23 @@ router.post('/', [
     check('email').custom( emailExists ),
     // check('role', 'No es un rol válido').isIn([ 'ADMIN_ROLE', 'USER_ROLE' ]),
     check('role').custom( isValidRole ),
-    validateFields
+    fieldsValidator
 ], addUser);    
 
 router.put('/:id', [
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( userExistsById ),
     check('role').custom( isValidRole ),
-    validateFields
+    fieldsValidator
 ], updateUser);   
 
 router.delete('/:id', [
+    jwtValidator,
+    // isAdminRole,
+    hasRole('ADMIN_ROLE', 'SALES_ROLE', 'OTHER_ROLE'),
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( userExistsById ),
-    validateFields
+    fieldsValidator
 ], deleteUser);        
 
 module.exports = router;

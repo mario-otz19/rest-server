@@ -6,16 +6,12 @@ const User = require('../models/user');
 const getUsers = async(req = request, res = response) => {
     const { from = 0, limit = 5 } = req.query;
     const query = { state: true };
-    
-    // const users = await User.find(query)
-    //     .skip( Number(from) )
-    //     .limit( Number(limit) );
-
-    // const totalRecords = await User.countDocuments(query);
 
     const [ totalRecords, users ] = await Promise.all([
         User.countDocuments(query),
-        User.find(query).skip( Number(from) ).limit( Number(limit) )
+        User.find(query)
+            .skip( Number(from) )
+            .limit( Number(limit) )
     ]);
 
     res.json({
@@ -66,7 +62,7 @@ const deleteUser = async(req, res) => {
     // const user = await User.findByIdAndDelete(id);
     
     // Actualizar el estado del usuario (para que no se muestre)
-    const user = await User.findByIdAndUpdate(id, { state: false }, {new: true});
+    const user = await User.findByIdAndUpdate(id, { state: false }, { new: true });
 
     res.json({
         user

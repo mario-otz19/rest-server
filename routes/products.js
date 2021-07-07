@@ -3,7 +3,7 @@ const { check } = require('express-validator');
 const router = Router();
 
 const { jwtValidator, fieldsValidator, isAdminRole } = require('../middlewares');
-const { categoryExistsById, productExistsById } = require('../helpers/validatorsDB');
+const { categoryExistsById, productExistsById } = require('../helpers/dbValidators');
 const { createProduct, deleteProduct, getProduct, getProducts, updateProduct } = require('../controllers/products');
 
 router.get('/', getProducts);

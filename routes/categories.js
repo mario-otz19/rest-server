@@ -3,7 +3,7 @@ const { check } = require('express-validator');
 const router = Router();
 
 const { fieldsValidator, isAdminRole, jwtValidator } = require('../middlewares');
-const { categoryExistsById } = require('../helpers/validatorsDB');
+const { categoryExistsById } = require('../helpers/dbValidators');
 const { createCategory, deleteCategory, getCategories, getCategory, updateCategory } = require('../controllers/categories');
 
 // Obtener todas la cvategorías por ID

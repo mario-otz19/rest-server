@@ -2,10 +2,24 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const router = Router();
 
-const { fieldsValidator } = require('../middlewares/fieldsValidator');
-const { loadFile } = require('../controllers/uploads');
+const { fieldsValidator, validateFileUpload } = require('../middlewares');
+const { allowedCollections } = require('../helpers/dbValidators');
+const { loadFile, showImage, updateFile } = require('../controllers/uploads');
 
-// Subir archivo
-router.post('/', loadFile);
+// Subir archivo (imagen)
+router.post('/', validateFileUpload, loadFile);
+
+// Actualizar archivo (imagen)
+router.put('/:collection/:id', [
+    validateFileUpload,
+    check('id', 'No es un ID de Mongo válido').isMongoId(),
+    check('collection').custom( c => allowedCollections(c, ['users', 'products'])),
+    fieldsValidator
+], updateFile);
+
+router.get('/:collection/:id', [
+    check('id', 'No es un ID de Mongo válido').isMongoId(),
+    check('collection').custom( c => allowedCollections(c, ['users', 'products'])),
+], showImage);
 
 module.exports = router;

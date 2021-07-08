@@ -29,7 +29,8 @@ const ProductSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }
+    },
+    img: { type: String }
 });
 
 // Quitar valores que no se quieren mostrar

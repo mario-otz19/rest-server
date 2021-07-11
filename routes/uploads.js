@@ -4,7 +4,7 @@ const router = Router();
 
 const { fieldsValidator, validateFileUpload } = require('../middlewares');
 const { allowedCollections } = require('../helpers/dbValidators');
-const { loadFile, showImage, updateFile } = require('../controllers/uploads');
+const { loadFile, showImage, updateFile, updateCloudinaryImage } = require('../controllers/uploads');
 
 // Subir archivo (imagen)
 router.post('/', validateFileUpload, loadFile);
@@ -15,7 +15,8 @@ router.put('/:collection/:id', [
     check('id', 'No es un ID de Mongo válido').isMongoId(),
     check('collection').custom( c => allowedCollections(c, ['users', 'products'])),
     fieldsValidator
-], updateFile);
+// ], updateFile);
+], updateCloudinaryImage);
 
 router.get('/:collection/:id', [
     check('id', 'No es un ID de Mongo válido').isMongoId(),
